@@ -2,12 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.*;
 class phonebook extends JFrame implements ActionListener
 {
 JInternalFrame f1;
 JDesktopPane pane;
-private JTextField ufname,ulname,uadd,ucity,ustate,uzip,uphone,uemail;
+private JTextField ufname,ulname,uadd1,uadd2,ucity,ustate,uzip,uphone,uemail;
 JPanel sp,sp1,sp2,sp3,sp4,sp5,sp6,sp7,sp8;
+private String event;
 
     public phonebook()
     {
@@ -56,13 +58,13 @@ JPanel sp,sp1,sp2,sp3,sp4,sp5,sp6,sp7,sp8;
 		westPanel.add(sp7);
 
 		sp1.add(new JLabel("Address 1  "));			//ADDRESS SEARCH BOX
-		uadd = new JTextField(20);
-		sp1.add(uadd);
+		uadd1 = new JTextField(20);
+		sp1.add(uadd1);
 		westPanel.add(sp1);
 		
 		sp8.add(new JLabel("Address 2  "));			//ADDRESS SEARCH BOX
-		uadd = new JTextField(20);
-		sp8.add(uadd);
+		uadd2 = new JTextField(20);
+		sp8.add(uadd2);
 		westPanel.add(sp8);
 
 		sp2.add(new JLabel("City          "));			//CITY SEARCH BOX
@@ -94,15 +96,23 @@ JPanel sp,sp1,sp2,sp3,sp4,sp5,sp6,sp7,sp8;
 		//TOOLBAR   (NON-FUNCTIONING)
 		JToolBar tb = new JToolBar();
 		JButton button = new JButton("New");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
+		button.addActionListener(this);
+		JButton button1 = new JButton("Save");
+		button1.addActionListener(this);
+		JButton button2 = new JButton("Delete");
+		button2.addActionListener(this);
+		JButton button3 = new JButton("Search");
+		button3.addActionListener(this);
+		JButton button4 = new JButton("Print");
+		button4.addActionListener(this);
+		JButton button5 = new JButton("Update");
+		button5.addActionListener(this);
 		tb.add(button);
-		tb.add(new JButton("Save"));
-		tb.add(new JButton("Delete"));
-		tb.add(new JButton("Search"));
-		tb.add(new JButton("Print"));
+		tb.add(button1);
+		tb.add(button5);
+		tb.add(button2);
+		tb.add(button3);
+		tb.add(button4);
 		
 
         // Add all!
@@ -118,11 +128,41 @@ JPanel sp,sp1,sp2,sp3,sp4,sp5,sp6,sp7,sp8;
     }
     
     public void actionPerformed(ActionEvent e){
+    	event = e.getActionCommand();
+    	if (event == "New") {
+    		ufname.setText("");
+    		ulname.setText("");
+    		uadd1.setText("");
+    		uadd2.setText("");
+    		ucity.setText("");
+    		ustate.setText("");
+    		uzip.setText("");
+    		uphone.setText("");
+    		uemail.setText("");
+    	}
+    	if (event == "Save") {
+    		DbConnection save = new DbConnection();
+    		save.Save(ufname);
+    	}
+    	if (event == "Update"){
+    		
+    	}
+    	if (event == "Delete") {
+    		
+    	}
+    	if (event == "Search") {
+    		
+    	}
+    	if (event == "Print") {
+    		
+    	}
     	
     }
 
     public static void main(String args[])
     {
         new phonebook();
+        DbConnection connect = new DbConnection();
+        connect.Connection();
     }
 }
