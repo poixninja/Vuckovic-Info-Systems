@@ -9,7 +9,7 @@ JInternalFrame f1;
 JDesktopPane pane;
 private JTextField ufname,ulname,uadd1,uadd2,ucity,ustate,uzip,uphone,uemail;
 JPanel sp,sp1,sp2,sp3,sp4,sp5,sp6,sp7,sp8;
-private String event;
+private String event, fname, lname, add1, add2, city, state, zip, phone, email;
 
     public phonebook()
     {
@@ -142,7 +142,16 @@ private String event;
     	}
     	if (event == "Save") {
     		DbConnection save = new DbConnection();
-    		save.Save(ufname);
+    		fname = ufname.getText();
+    		lname = ulname.getText();
+    		add1 = uadd1.getText();
+    		add2 = uadd2.getText();
+    		city = ucity.getText();
+    		state = ustate.getText();
+    		zip = uzip.getText();
+    		phone = uphone.getText();
+    		email = uemail.getText();
+    		save.Save(fname, lname, add1, add2, city, state, zip, phone, email);
     	}
     	if (event == "Update"){
     		
