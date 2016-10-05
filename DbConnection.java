@@ -5,10 +5,8 @@ import java.sql.*;
 import java.util.*;
 import javax.swing.JTextField;
 public class DbConnection extends phonebook{
-	int count = 0;
-	//private String fn, ln, a1, a2, c, s, z, p, e;
-   // constructor connects to database, queries database,
-   // processes results and displays results in window
+	int count=0, pid;
+
    public void Connection()
    {
       try {
@@ -17,12 +15,16 @@ public class DbConnection extends phonebook{
          // connect to database
          Connection connection = DriverManager.getConnection(
             "jdbc:odbc:address_book" );
+        // PreparedStatement counter = connection.prepareStatement("SELECT MAX(emailID) from emailAddresses");
+       //  counter.executeQuery();
+        // count = (int) counter.getResultSet().getInt(1);
 
         
       }  // end try
 
       // detect problems interacting with the database
       catch ( SQLException sqlException ) {
+    	  System.out.println(sqlException.getMessage());
          System.exit( 1 );
       }
       // detect problems loading database driver
@@ -37,7 +39,6 @@ public void Save(String fname, String lname, String add1, String add2, String ci
 		   Class.forName( "sun.jdbc.odbc.JdbcOdbcDriver" );
 		   Connection c = DriverManager.getConnection(
 		            "jdbc:odbc:address_book" );
-		   //Statement statement = connection.createStatement();
 		   count++;
 		   PreparedStatement stm1 = c.prepareStatement("Insert into names (firstName,lastName) values (?,?)");
 		   stm1.setString(1,fname);
@@ -66,6 +67,69 @@ public void Save(String fname, String lname, String add1, String add2, String ci
 	         System.exit( 1 );}
 	   catch ( ClassNotFoundException classNotFound ) {
 	         System.exit( 1 );}
+}
+
+public void Update(String fname, String lname, String add1, String add2, String city, String state, String zip,
+		String phone, String email) {
+try{
+	   Class.forName( "sun.jdbc.odbc.JdbcOdbcDriver" );
+	   Connection c = DriverManager.getConnection(
+	            "jdbc:odbc:address_book" );
+	   
+	   PreparedStatement update = c.prepareStatement("");
+	
+}
+catch ( SQLException sqlException ) {
+	   System.out.println(sqlException.getMessage());
+       System.exit( 1 );}
+ catch ( ClassNotFoundException classNotFound ) {
+       System.exit( 1 );}
+}
+
+public void Search(String fname, String lname, String add1, String add2, String city, String state, String zip,
+		String phone, String email) {
+	try{
+		   Class.forName( "sun.jdbc.odbc.JdbcOdbcDriver" );
+		   Connection c = DriverManager.getConnection(
+		            "jdbc:odbc:address_book" );
+		   
+		   PreparedStatement search = c.prepareStatement("Select names.personID from names inner join "
+		   		+ "(addresses inner join "
+		   		+ "(phoneNumbers inner join emailAddresses "
+		   		+ "on emailAddresses.personID = phoneNumbers.personID)"
+		   		+ "on phoneNumbers.personID = addresses.personID)"
+		   		+ "on addresses.personID = names.personID "
+		   		+ "where firstName = ? and "
+		   		+ "lastName = ? and "
+		   		+ "street1 = ? and "
+		   		+ "street2 = ? and "
+		   		+ "city = ? and "
+		   		+ "state = ? and "
+		   		+ "zipcode = ? and "
+		   		+ "emailAddress = ? "
+		   		+ "and phoneNumber = ? "
+		   		+ "group by personID");
+		   search.setString(1 , fname);
+		   search.setString(2 , lname);
+		   search.setString(3, add1);
+		   search.setString(4, add2);
+		   search.setString(5, city);
+		   search.setString(6, state);
+		   search.setString(7, zip);
+		   search.setString(8, phone);
+		   search.setString(9, email);
+		   search.executeQuery();
+		   pid = search.getResultSet().getInt(1);
+		   System.out.println(pid);
+		   
+		
+	}
+	catch ( SQLException sqlException ) {
+		   System.out.println(sqlException.getMessage());
+	       System.exit( 1 );}
+	 catch ( ClassNotFoundException classNotFound ) {
+	       System.exit( 1 );}
+	
 }
   
 

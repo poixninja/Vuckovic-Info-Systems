@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
+import java.awt.event.*;
 import java.sql.*;
 class phonebook extends JFrame implements ActionListener
 {
@@ -9,16 +9,22 @@ JInternalFrame f1;
 JDesktopPane pane;
 private JTextField ufname,ulname,uadd1,uadd2,ucity,ustate,uzip,uphone,uemail;
 JPanel sp,sp1,sp2,sp3,sp4,sp5,sp6,sp7,sp8;
-private String event, fname, lname, add1, add2, city, state, zip, phone, email;
+private String event ="", fname="", lname="", add1="", add2="", city="", state="", zip="", phone="", email="";
 
     public phonebook()
     {
         CreateGui();
     }
+    
+   // private void windowResize(ComponentEvent e){
+    //	if (e.getSource() == f1){
+    	//	f1.setBounds(0, 0, pane.getWidth(), pane.getHeight());
+    //	}
+   // }
 
     private void CreateGui()
     {
-        setTitle("Phonebook");
+        setTitle("Phonebook by Team Hats");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         pane=new JDesktopPane();
         pane.setBackground(Color.GRAY);
@@ -93,7 +99,7 @@ private String event, fname, lname, add1, add2, city, state, zip, phone, email;
 		westPanel.add(sp6);
 
 
-		//TOOLBAR   (NON-FUNCTIONING)
+		//TOOLBAR   (SEMI-FUNCTIONING)
 		JToolBar tb = new JToolBar();
 		JButton button = new JButton("New");
 		button.addActionListener(this);
@@ -107,12 +113,15 @@ private String event, fname, lname, add1, add2, city, state, zip, phone, email;
 		button4.addActionListener(this);
 		JButton button5 = new JButton("Update");
 		button5.addActionListener(this);
+		JButton button6 = new JButton("Clear");
+		button6.addActionListener(this);
 		tb.add(button);
 		tb.add(button1);
 		tb.add(button5);
 		tb.add(button2);
 		tb.add(button3);
 		tb.add(button4);
+		tb.add(button6);
 		
 
         // Add all!
@@ -154,16 +163,86 @@ private String event, fname, lname, add1, add2, city, state, zip, phone, email;
     		save.Save(fname, lname, add1, add2, city, state, zip, phone, email);
     	}
     	if (event == "Update"){
-    		
+    		DbConnection update = new DbConnection();
+    		fname = ufname.getText();
+    		lname = ulname.getText();
+    		add1 = uadd1.getText();
+    		add2 = uadd2.getText();
+    		city = ucity.getText();
+    		state = ustate.getText();
+    		zip = uzip.getText();
+    		phone = uphone.getText();
+    		email = uemail.getText();
+    		update.Update(fname, lname, add1, add2, city, state, zip, phone, email);
     	}
     	if (event == "Delete") {
     		
     	}
     	if (event == "Search") {
+    		DbConnection search = new DbConnection();
+    		if (ufname.getText().isEmpty()){
+    			fname = "*";
+    		}
+    		else fname = ufname.getText();
+    		
+    		if (ulname.getText().isEmpty()){
+    			lname = "*";
+    		}
+    		else lname = ulname.getText();
+    		
+    		if (uadd1.getText().isEmpty()){
+    			add1 = "*";
+    		}
+    		else add1 = uadd1.getText();
+    		
+    		if (uadd2.getText().isEmpty()){
+    			add2 = "*";
+    		}
+    		else add2 = uadd2.getText();
+    		
+    		if (ucity.getText().isEmpty()){
+    			city = "*";
+    		}
+    		else city = ucity.getText();
+    		
+    		if (ustate.getText().isEmpty()){
+    			state = "*";
+    		}
+    		else state = ustate.getText();
+    		
+    		if (uzip.getText().isEmpty()){
+    			zip = "*";
+    		}
+    		else zip = uzip.getText();
+    		
+    		if (uphone.getText().isEmpty()){
+    			phone = "*";
+    		}
+    		else phone = uphone.getText();
+    		
+    		if (uemail.getText().isEmpty()){
+    			email = "*";
+    		}
+    		else email = uemail.getText();
+    		
+    		search.Search(fname, lname, add1, add2, city, state, zip, phone, email);
+    		
     		
     	}
     	if (event == "Print") {
     		
+    	}
+    	
+    	if (event == "Clear") {
+    		ufname.setText("");
+    		ulname.setText("");
+    		uadd1.setText("");
+    		uadd2.setText("");
+    		ucity.setText("");
+    		ustate.setText("");
+    		uzip.setText("");
+    		uphone.setText("");
+    		uemail.setText("");
     	}
     	
     }
