@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import java.awt.event.*;
 import java.sql.*;
@@ -15,7 +17,7 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
     {
         CreateGui();
     }
-    
+
    // private void windowResize(ComponentEvent e){
     //	if (e.getSource() == f1){
     	//	f1.setBounds(0, 0, pane.getWidth(), pane.getHeight());
@@ -67,7 +69,7 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
 		uadd1 = new JTextField(20);
 		sp1.add(uadd1);
 		westPanel.add(sp1);
-		
+
 		sp8.add(new JLabel("Address 2  "));			//ADDRESS SEARCH BOX
 		uadd2 = new JTextField(20);
 		sp8.add(uadd2);
@@ -122,7 +124,7 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
 		tb.add(button3);
 		tb.add(button4);
 		tb.add(button6);
-		
+
 
         // Add all!
         f1.getContentPane().add(westPanel, BorderLayout.WEST);
@@ -135,7 +137,7 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
         setSize(500,540);
         setVisible(true);
     }
-    
+
     public void actionPerformed(ActionEvent e){
     	event = e.getActionCommand();
     	if (event == "New") {
@@ -148,6 +150,9 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
     		uzip.setText("");
     		uphone.setText("");
     		uemail.setText("");
+
+    		//JFrame msg = new JFrame(); For Pop up message
+			//JOptionPane.showMessageDialog(msg, "Insertion Completed");
     	}
     	if (event == "Save") {
     		DbConnection save = new DbConnection();
@@ -161,6 +166,10 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
     		phone = uphone.getText();
     		email = uemail.getText();
     		save.Save(fname, lname, add1, add2, city, state, zip, phone, email);
+
+    		//JFrame msg = new JFrame(); For Pop up message
+			//JOptionPane.showMessageDialog(msg, "Insertion Completed");
+
     	}
     	if (event == "Update"){
     		DbConnection update = new DbConnection();
@@ -176,7 +185,9 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
     		update.Update(fname, lname, add1, add2, city, state, zip, phone, email);
     	}
     	if (event == "Delete") {
-    		
+			//JFrame msg = new JFrame(); For Pop up message
+			//JOptionPane.showMessageDialog(msg, "Record deleted");
+
     	}
     	if (event == "Search") {
     		DbConnection search = new DbConnection();
@@ -184,55 +195,58 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
     			fname = "*";
     		}
     		else fname = ufname.getText();
-    		
+
     		if (ulname.getText().isEmpty()){
     			lname = "*";
     		}
     		else lname = ulname.getText();
-    		
+
     		if (uadd1.getText().isEmpty()){
     			add1 = "*";
     		}
     		else add1 = uadd1.getText();
-    		
+
     		if (uadd2.getText().isEmpty()){
     			add2 = "*";
     		}
     		else add2 = uadd2.getText();
-    		
+
     		if (ucity.getText().isEmpty()){
     			city = "*";
     		}
     		else city = ucity.getText();
-    		
+
     		if (ustate.getText().isEmpty()){
     			state = "*";
     		}
     		else state = ustate.getText();
-    		
+
     		if (uzip.getText().isEmpty()){
     			zip = "*";
     		}
     		else zip = uzip.getText();
-    		
+
     		if (uphone.getText().isEmpty()){
     			phone = "*";
     		}
     		else phone = uphone.getText();
-    		
+
     		if (uemail.getText().isEmpty()){
     			email = "*";
     		}
     		else email = uemail.getText();
-    		
+
     		search.Search(fname, lname, add1, add2, city, state, zip, phone, email);
-    		
-    		
+
+
     	}
     	if (event == "Print") {
-    		
+
+			//JFrame msg = new JFrame(); For Pop up message
+			//JOptionPane.showMessageDialog(msg, "Printing");
+
     	}
-    	
+
     	if (event == "Clear") {
     		ufname.setText("");
     		ulname.setText("");
@@ -244,7 +258,7 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
     		uphone.setText("");
     		uemail.setText("");
     	}
-    	
+
     }
 
     public static void main(String args[])
