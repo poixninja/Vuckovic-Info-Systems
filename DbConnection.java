@@ -1,9 +1,12 @@
 // Connect to Access Database using JDBC-ODBC Bridge
-// Displaying the contents of table S in database S_P_SP.
+// Displaying the contents of table S in database Adress-Book.
 // Java core packages
 import java.sql.*;
 import java.util.*;
 import javax.swing.JTextField;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 public class DbConnection extends phonebook{
 	int count=0, pid;
 
@@ -14,12 +17,12 @@ public class DbConnection extends phonebook{
          Class.forName( "sun.jdbc.odbc.JdbcOdbcDriver" );
          // connect to database
          Connection connection = DriverManager.getConnection(
-            "jdbc:odbc:address_book" );
+            "jdbc:odbc:Address-Book" );
         // PreparedStatement counter = connection.prepareStatement("SELECT MAX(emailID) from emailAddresses");
        //  counter.executeQuery();
         // count = (int) counter.getResultSet().getInt(1);
 
-        
+
       }  // end try
 
       // detect problems interacting with the database
@@ -32,13 +35,13 @@ public class DbConnection extends phonebook{
          System.exit( 1 );
       }
    }
-  
+
 public void Save(String fname, String lname, String add1, String add2, String city, String state, String zip,
 		String phone, String email) {
 	try {
 		   Class.forName( "sun.jdbc.odbc.JdbcOdbcDriver" );
 		   Connection c = DriverManager.getConnection(
-		            "jdbc:odbc:address_book" );
+		            "jdbc:odbc:Address-Book" );
 		   count++;
 		   PreparedStatement stm1 = c.prepareStatement("Insert into names (firstName,lastName) values (?,?)");
 		   stm1.setString(1,fname);
@@ -60,7 +63,10 @@ public void Save(String fname, String lname, String add1, String add2, String ci
 		   stm4.setInt(1, count);
 		   stm4.setString(2, phone);
 		   stm4.executeUpdate();
-		   
+
+		   	//JFrame msg = new JFrame();
+			//JOptionPane.showMessageDialog(msg, "Entry Complete");
+			//For Pop-up messages
 	   }
 	   catch ( SQLException sqlException ) {
 		   System.out.println(sqlException.getMessage());
@@ -74,10 +80,10 @@ public void Update(String fname, String lname, String add1, String add2, String 
 try{
 	   Class.forName( "sun.jdbc.odbc.JdbcOdbcDriver" );
 	   Connection c = DriverManager.getConnection(
-	            "jdbc:odbc:address_book" );
-	   
+	            "jdbc:odbc:Address-Book" );
+
 	   PreparedStatement update = c.prepareStatement("");
-	
+
 }
 catch ( SQLException sqlException ) {
 	   System.out.println(sqlException.getMessage());
@@ -91,8 +97,8 @@ public void Search(String fname, String lname, String add1, String add2, String 
 	try{
 		   Class.forName( "sun.jdbc.odbc.JdbcOdbcDriver" );
 		   Connection c = DriverManager.getConnection(
-		            "jdbc:odbc:address_book" );
-		   
+		            "jdbc:odbc:Address-Book" );
+
 		   PreparedStatement search = c.prepareStatement("Select names.personID from names inner join "
 		   		+ "(addresses inner join "
 		   		+ "(phoneNumbers inner join emailAddresses "
@@ -121,16 +127,16 @@ public void Search(String fname, String lname, String add1, String add2, String 
 		   search.executeQuery();
 		   pid = search.getResultSet().getInt(1);
 		   System.out.println(pid);
-		   
-		
+
+
 	}
 	catch ( SQLException sqlException ) {
 		   System.out.println(sqlException.getMessage());
 	       System.exit( 1 );}
 	 catch ( ClassNotFoundException classNotFound ) {
 	       System.exit( 1 );}
-	
+
 }
-  
+
 
 }  // end class DbConnection
