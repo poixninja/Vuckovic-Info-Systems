@@ -7,9 +7,18 @@ import java.awt.event.*;
 import java.sql.*;
 class phonebook extends JFrame implements ActionListener
 {
+DbConnection connect = new DbConnection();
 JInternalFrame f1;
 JDesktopPane pane;
-private JTextField ufname,ulname,uadd1,uadd2,ucity,ustate,uzip,uphone,uemail;
+public JTextField ufname;
+public JTextField ulname;
+public JTextField uadd1;
+public JTextField uadd2;
+public JTextField ucity;
+public JTextField ustate;
+public JTextField uzip;
+public JTextField uphone;
+public JTextField uemail;
 JPanel sp,sp1,sp2,sp3,sp4,sp5,sp6,sp7,sp8;
 private String event ="", fname="", lname="", add1="", add2="", city="", state="", zip="", phone="", email="";
 
@@ -140,6 +149,7 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
 
     public void actionPerformed(ActionEvent e){
     	event = e.getActionCommand();
+
     	if (event == "New") {
     		ufname.setText("");
     		ulname.setText("");
@@ -155,7 +165,6 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
 			//JOptionPane.showMessageDialog(msg, "Insertion Completed");
     	}
     	if (event == "Save") {
-    		DbConnection save = new DbConnection();
     		fname = ufname.getText();
     		lname = ulname.getText();
     		add1 = uadd1.getText();
@@ -165,14 +174,13 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
     		zip = uzip.getText();
     		phone = uphone.getText();
     		email = uemail.getText();
-    		save.Save(fname, lname, add1, add2, city, state, zip, phone, email);
+    		connect.Save(fname, lname, add1, add2, city, state, zip, phone, email);
 
-    		//JFrame msg = new JFrame(); For Pop up message
-			//JOptionPane.showMessageDialog(msg, "Insertion Completed");
+    		JFrame msg = new JFrame(); //For Pop up message
+			JOptionPane.showMessageDialog(msg, "Insertion Completed");
 
     	}
     	if (event == "Update"){
-    		DbConnection update = new DbConnection();
     		fname = ufname.getText();
     		lname = ulname.getText();
     		add1 = uadd1.getText();
@@ -182,7 +190,10 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
     		zip = uzip.getText();
     		phone = uphone.getText();
     		email = uemail.getText();
-    		update.Update(fname, lname, add1, add2, city, state, zip, phone, email);
+    	
+    		connect.Update(fname, lname, add1, add2, city, state, zip, phone, email);
+    		JFrame msg = new JFrame(); //For Pop up message
+			JOptionPane.showMessageDialog(msg, "Update Done");
     	}
     	if (event == "Delete") {
 			//JFrame msg = new JFrame(); For Pop up message
@@ -190,53 +201,9 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
 
     	}
     	if (event == "Search") {
-    		DbConnection search = new DbConnection();
-    		if (ufname.getText().isEmpty()){
-    			fname = "*";
-    		}
-    		else fname = ufname.getText();
+    		
 
-    		if (ulname.getText().isEmpty()){
-    			lname = "*";
-    		}
-    		else lname = ulname.getText();
-
-    		if (uadd1.getText().isEmpty()){
-    			add1 = "*";
-    		}
-    		else add1 = uadd1.getText();
-
-    		if (uadd2.getText().isEmpty()){
-    			add2 = "*";
-    		}
-    		else add2 = uadd2.getText();
-
-    		if (ucity.getText().isEmpty()){
-    			city = "*";
-    		}
-    		else city = ucity.getText();
-
-    		if (ustate.getText().isEmpty()){
-    			state = "*";
-    		}
-    		else state = ustate.getText();
-
-    		if (uzip.getText().isEmpty()){
-    			zip = "*";
-    		}
-    		else zip = uzip.getText();
-
-    		if (uphone.getText().isEmpty()){
-    			phone = "*";
-    		}
-    		else phone = uphone.getText();
-
-    		if (uemail.getText().isEmpty()){
-    			email = "*";
-    		}
-    		else email = uemail.getText();
-
-    		search.Search(fname, lname, add1, add2, city, state, zip, phone, email);
+    		connect.Search(ufname, ulname, uadd1, uadd2, ucity, ustate, uzip, uphone, uemail);
 
 
     	}
@@ -261,10 +228,19 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
 
     }
 
+    public void searchField(String dbfname, String dblname, String dbadd1, String dbadd2, String dbcity, String dbstate, String dbzip, String dbphone, String dbemail){
+    	ufname.setText(dbfname);
+		ulname.setText(dblname);
+		uadd1.setText(dbadd1);
+		uadd2.setText(dbadd2);
+		ucity.setText(dbcity);
+		ustate.setText(dbstate);
+		uzip.setText(dbzip);
+		uphone.setText(dbphone);
+		uemail.setText(dbemail);
+    }
     public static void main(String args[])
     {
         new phonebook();
-        DbConnection connect = new DbConnection();
-        connect.Connection();
     }
 }
