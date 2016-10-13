@@ -253,5 +253,42 @@ public void Search(JTextField ufname, JTextField ulname, JTextField uadd1, JText
 
 }
 
+public void Delete() {
+	try {
+        // load database driver class
+        Class.forName( "sun.jdbc.odbc.JdbcOdbcDriver" );
+        // connect to database
+        Connection c = DriverManager.getConnection(
+           "jdbc:odbc:Address-Book" );
+      PreparedStatement delete1 = c.prepareStatement("delete from names where personID=?");
+      delete1.setInt(1, intpid);
+      delete1.executeUpdate();
+      
+      PreparedStatement delete2 = c.prepareStatement("delete from phoneNumbers where personID=?");
+      delete2.setInt(1, intpid);
+      delete2.executeUpdate();
+      
+      PreparedStatement delete3 = c.prepareStatement("delete from addresses where personID=?");
+      delete3.setInt(1, intpid);
+      delete3.executeUpdate();
+      
+      PreparedStatement delete4 = c.prepareStatement("delete from emailAddresses where personID=?");
+      delete4.setInt(1, intpid);
+      delete4.executeUpdate();
+
+
+     }  // end try
+
+     // detect problems interacting with the database
+     catch ( SQLException sqlException ) {
+   	  System.out.println(sqlException.getMessage());
+        System.exit( 1 );
+     }
+     // detect problems loading database driver
+     catch ( ClassNotFoundException classNotFound ) {
+        System.exit( 1 );
+     }
+}
+
 
 }  // end class DbConnection

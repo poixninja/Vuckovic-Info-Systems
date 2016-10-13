@@ -196,8 +196,10 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
 			JOptionPane.showMessageDialog(msg, "Update Done");
     	}
     	if (event == "Delete") {
-			//JFrame msg = new JFrame(); For Pop up message
-			//JOptionPane.showMessageDialog(msg, "Record deleted");
+    		
+    		connect.Delete();
+			JFrame msg = new JFrame(); //For Pop up message
+			JOptionPane.showMessageDialog(msg, "Record deleted");
 
     	}
     	if (event == "Search") {
