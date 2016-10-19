@@ -2,7 +2,6 @@
 // Displaying the contents of table S in database Adress-Book.
 // Java core packages
 import java.sql.*;
-import java.util.*;
 import javax.swing.JTextField;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -12,32 +11,6 @@ public class DbConnection {
 	
 	int count=0, intpid;
 	String dbfname, dblname, dbadd1,dbadd2,dbcity,dbstate,dbzip,dbphone,dbemail,pid;
-
-   public void Connection()
-   {
-      try {
-         // load database driver class
-         Class.forName( "sun.jdbc.odbc.JdbcOdbcDriver" );
-         // connect to database
-         Connection connection = DriverManager.getConnection(
-            "jdbc:odbc:Address-Book" );
-        // PreparedStatement counter = connection.prepareStatement("SELECT MAX(emailID) from emailAddresses");
-       //  counter.executeQuery();
-        // count = (int) counter.getResultSet().getInt(1);
-
-
-      }  // end try
-
-      // detect problems interacting with the database
-      catch ( SQLException sqlException ) {
-    	  System.out.println(sqlException.getMessage());
-         System.exit( 1 );
-      }
-      // detect problems loading database driver
-      catch ( ClassNotFoundException classNotFound ) {
-         System.exit( 1 );
-      }
-   }
 
 public void Save(String fname, String lname, String add1, String add2, String city, String state, String zip,
 		String phone, String email) {
@@ -128,59 +101,21 @@ catch ( SQLException sqlException ) {
 }
 
 public void Search(JTextField ufname, JTextField ulname, JTextField uadd1, JTextField uadd2, JTextField ucity, JTextField ustate, JTextField uzip,
-		JTextField uphone, JTextField uemail) {
+		JTextField uphone, JTextField uemail, JFrame msg) {
 	try{
-		String fname, lname, add1, add2, city, state, zip, phone, email;
+		String lname;
 		
-		if (ufname.getText().isEmpty()){
-			fname = "*";
-		}
-		else fname = ufname.getText();
 
 		if (ulname.getText().isEmpty()){
 			lname = "*";
 		}
 		else lname = ulname.getText();
 
-		if (uadd1.getText().isEmpty()){
-			add1 = "*";
-		}
-		else add1 = uadd1.getText();
 
-		if (uadd2.getText().isEmpty()){
-			add2 = "*";
-		}
-		else add2 = uadd2.getText();
-
-		if (ucity.getText().isEmpty()){
-			city = "*";
-		}
-		else city = ucity.getText();
-
-		if (ustate.getText().isEmpty()){
-			state = "*";
-		}
-		else state = ustate.getText();
-
-		if (uzip.getText().isEmpty()){
-			zip = "*";
-		}
-		else zip = uzip.getText();
-
-		if (uphone.getText().isEmpty()){
-			phone = "*";
-		}
-		else phone = uphone.getText();
-
-		if (uemail.getText().isEmpty()){
-			email = "*";
-		}
-		else email = uemail.getText();
-		
 		   Class.forName( "sun.jdbc.odbc.JdbcOdbcDriver" );
 		   Connection c = DriverManager.getConnection(
 		            "jdbc:odbc:Address-Book" );
-		 //  phonebook phonebook = new phonebook();
+		
 
 		   PreparedStatement search = c.prepareStatement("Select names.*, emailAddresses.*, addresses.*, phoneNumbers.* from names inner join "
 		   		+ "(addresses inner join "
@@ -188,29 +123,12 @@ public void Search(JTextField ufname, JTextField ulname, JTextField uadd1, JText
 		   		+ "on emailAddresses.personID = phoneNumbers.personID)"
 		   		+ "on phoneNumbers.personID = addresses.personID)"
 		   		+ "on addresses.personID = names.personID "
-		   		//+ "where firstName = ? and "
 		   		+ "where lastName = ?");
-		   		//+ "street2 = ? and "
-		   		//+ "city = ? and "
-		   		//+ "state = ? and "
-		   		//+ "zipcode = ? and "
-		   		//+ "emailAddress = ? "
-		   		//+ "and phoneNumber = ? ");
-		  // search.setString(1 , fname);
 		   search.setString(1 , lname);
-		  // search.setString(2, add1);
-		  // search.setString(4, add2);
-		  // search.setString(5, city);
-		  // search.setString(6, state);
-		  // search.setString(7, zip);
-		  // search.setString(8, phone);
-		  // search.setString(9, email);
 		   ResultSet rs = search.executeQuery();
 		 if (rs.next()){
 		  	   pid = search.getResultSet().getString(1);
 		  	   intpid = Integer.parseInt(pid);
-		  	  // System.out.println(pid);
-		  	   //System.out.println(intpid);
 		  	   }
 		 
 			   dbfname = search.getResultSet().getString(2);
@@ -232,22 +150,11 @@ public void Search(JTextField ufname, JTextField ulname, JTextField uadd1, JText
 			   uzip.setText(dbzip);
 			   uphone.setText(dbphone);
 			   uemail.setText(dbemail);
-			   
-			   
-			  
-			  
-			   
-			  //phonebook.searchField(dbfname, dblname, dbadd1,dbadd2,dbcity,dbstate,dbzip,dbphone,dbemail);
-			   
-		   
-		//   System.out.println(dbfname+dblname+dbadd1+dbadd2+dbcity+dbstate+dbzip+dbphone+dbemail);
-		   
-
-
 	}
 	catch ( SQLException sqlException ) {
 		   System.out.println(sqlException.getMessage());
-	       System.exit( 1 );}
+		   JOptionPane.showMessageDialog(msg, "No Results Found!");
+	       }
 	 catch ( ClassNotFoundException classNotFound ) {
 	       System.exit( 1 );}
 
@@ -289,6 +196,5 @@ public void Delete() {
         System.exit( 1 );
      }
 }
-
 
 }  // end class DbConnection

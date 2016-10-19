@@ -2,11 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
 import java.awt.event.*;
-import java.sql.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.print.*;
+
+
 class phonebook extends JFrame implements ActionListener
 {
+	private static final long serialVersionUID = 1L;
 DbConnection connect = new DbConnection();
 JInternalFrame f1;
 JDesktopPane pane;
@@ -109,7 +113,6 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
 		sp6.add(uemail);
 		westPanel.add(sp6);
 
-
 		//TOOLBAR   (SEMI-FUNCTIONING)
 		JToolBar tb = new JToolBar();
 		JButton button = new JButton("New");
@@ -134,14 +137,11 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
 		tb.add(button4);
 		tb.add(button6);
 
-
         // Add all!
         f1.getContentPane().add(westPanel, BorderLayout.WEST);
         f1.getContentPane().add(tb, BorderLayout.NORTH);
         pane.add(f1);
         getContentPane().add(pane);
-
-
 
         setSize(500,540);
         setVisible(true);
@@ -178,7 +178,6 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
 
     		JFrame msg = new JFrame(); //For Pop up message
 			JOptionPane.showMessageDialog(msg, "Insertion Completed");
-
     	}
     	if (event == "Update"){
     		fname = ufname.getText();
@@ -190,29 +189,46 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
     		zip = uzip.getText();
     		phone = uphone.getText();
     		email = uemail.getText();
-    	
+
     		connect.Update(fname, lname, add1, add2, city, state, zip, phone, email);
     		JFrame msg = new JFrame(); //For Pop up message
 			JOptionPane.showMessageDialog(msg, "Update Done");
     	}
     	if (event == "Delete") {
-    		
+
     		connect.Delete();
 			JFrame msg = new JFrame(); //For Pop up message
 			JOptionPane.showMessageDialog(msg, "Record deleted");
 
     	}
     	if (event == "Search") {
-    		
 
-    		connect.Search(ufname, ulname, uadd1, uadd2, ucity, ustate, uzip, uphone, uemail);
-
+    		JFrame msg = new JFrame();
+    		connect.Search(ufname, ulname, uadd1, uadd2, ucity, ustate, uzip, uphone, uemail, msg);
 
     	}
     	if (event == "Print") {
 
 			//JFrame msg = new JFrame(); For Pop up message
 			//JOptionPane.showMessageDialog(msg, "Printing");
+		PrinterJob pjob = PrinterJob.getPrinterJob();
+		PageFormat preformat = pjob.defaultPage();
+		preformat.setOrientation(PageFormat.LANDSCAPE);
+		PageFormat postformat = pjob.pageDialog(preformat);
+		//If user does not hit cancel then print.
+		if (preformat != postformat) {
+		    //Set print component
+		    pjob.setPrintable(new Printer(this), postformat);
+		    if (pjob.printDialog()) {
+		        try {
+					pjob.print();
+				}
+				catch (PrinterException ex) {
+				System.out.println(ex.getMessage());
+				          /* The job did not successfully complete */
+         }
+		    }
+}
 
     	}
 
@@ -227,7 +243,6 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
     		uphone.setText("");
     		uemail.setText("");
     	}
-
     }
 
     public void searchField(String dbfname, String dblname, String dbadd1, String dbadd2, String dbcity, String dbstate, String dbzip, String dbphone, String dbemail){
@@ -241,6 +256,43 @@ private String event ="", fname="", lname="", add1="", add2="", city="", state="
 		uphone.setText(dbphone);
 		uemail.setText(dbemail);
     }
+    public static class Printer implements Printable {
+	    final Component comp;
+
+	    public Printer(Component comp){
+	        this.comp = comp;
+	    }
+
+	    public int print(Graphics g, PageFormat format, int page_index)
+	            throws PrinterException {
+	        if (page_index > 0) {
+	            return Printable.NO_SUCH_PAGE;
+	        }
+
+	        // get the bounds of the component
+	        Dimension dim = comp.getSize();
+	        double cHeight = dim.getHeight();
+	        double cWidth = dim.getWidth();
+
+	        // get the bounds of the printable area
+	        double pHeight = format.getImageableHeight();
+	        double pWidth = format.getImageableWidth();
+
+	        double pXStart = format.getImageableX();
+	        double pYStart = format.getImageableY();
+
+	        double xRatio = pWidth / cWidth;
+	        double yRatio = pHeight / cHeight;
+
+
+	        Graphics2D g2 = (Graphics2D) g;
+	        g2.translate(pXStart, pYStart);
+	        g2.scale(xRatio, yRatio);
+	        comp.paint(g2);
+
+	        return Printable.PAGE_EXISTS;
+	    }
+}
     public static void main(String args[])
     {
         new phonebook();
